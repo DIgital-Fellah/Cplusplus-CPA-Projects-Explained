@@ -1,0 +1,69 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+// Function to copy contents from source file to destination file
+void copyFile(const std::string& sourceFile, const std::string& destFile) {
+    // Declare input file stream for reading
+    std::ifstream source;
+    // Declare output file stream for writing
+    std::ofstream destination;
+
+    try {
+        // Open the source file for reading
+        source.open(sourceFile);
+        // Check if the source file was successfully opened
+        if (!source.is_open()) {
+            throw std::runtime_error("Unable to open source file");
+        }
+
+        // Open the destination file for writing
+        destination.open(destFile);
+        // Check if the destination file was successfully opened
+        if (!destination.is_open()) {
+            throw std::runtime_error("Unable to open destination file");
+        }
+
+        // Declare a string to store each line of the file
+        std::string line;
+        
+        // Read the source file line by line
+        while (std::getline(source, line)) {
+            // Write each line to the destination file
+            destination << line << '\n';
+        }
+
+        // Close both files
+        source.close();
+        destination.close();
+
+        std::cout << "File copied successfully!" << std::endl;
+    }
+    // Catch any exceptions that might occur during file operations
+    catch (const std::exception& e) {
+        // Print the error message
+        std::cerr << "Error: " << e.what() << std::endl;
+        
+        // Close files if they are open
+        if (source.is_open()) source.close();
+        if (destination.is_open()) destination.close();
+    }
+}
+
+int main() {
+    // Declare strings to store file names
+    std::string sourceFile, destFile;
+
+    // Prompt user for source file name
+    std::cout << "Enter the source file name: ";
+    std::getline(std::cin, sourceFile);
+
+    // Prompt user for destination file name
+    std::cout << "Enter the destination file name: ";
+    std::getline(std::cin, destFile);
+
+    // Call the copyFile function to perform the file copy
+    copyFile(sourceFile, destFile);
+
+    return 0;
+}
