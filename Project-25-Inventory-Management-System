@@ -1,0 +1,138 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stdexcept>
+
+// Define a class to represent an item in the inventory
+class InventoryItem {
+private:
+    std::string name;
+    int quantity;
+    double price;
+
+public:
+    // Constructor to initialize an item
+    InventoryItem(const std::string& itemName, int itemQuantity, double itemPrice)
+        : name(itemName), quantity(itemQuantity), price(itemPrice) {
+        // Check if the quantity is negative
+        if (itemQuantity < 0) {
+            throw std::invalid_argument("Quantity cannot be negative");
+        }
+        // Check if the price is negative
+        if (itemPrice < 0) {
+            throw std::invalid_argument("Price cannot be negative");
+        }
+    }
+
+    // Getter methods to access private members
+    std::string getName() const { return name; }
+    int getQuantity() const { return quantity; }
+    double getPrice() const { return price; }
+
+    // Method to update the quantity of an item
+    void updateQuantity(int newQuantity) {
+        if (newQuantity < 0) {
+            throw std::invalid_argument("Quantity cannot be negative");
+        }
+        quantity = newQuantity;
+    }
+
+    // Method to update the price of an item
+    void updatePrice(double newPrice) {
+        if (newPrice < 0) {
+            throw std::invalid_argument("Price cannot be negative");
+        }
+        price = newPrice;
+    }
+};
+
+// Define a class to manage the inventory
+class InventoryManager {
+private:
+    std::vector<InventoryItem> inventory;
+
+public:
+    // Method to add a new item to the inventory
+    void addItem(const std::string& name, int quantity, double price) {
+        // Check if the item already exists
+        for (const auto& item : inventory) {
+            if (item.getName() == name) {
+                throw std::invalid_argument("Item already exists in inventory");
+            }
+        }
+        // If the item doesn't exist, add it to the inventory
+        inventory.emplace_back(name, quantity, price);
+    }
+
+    // Method to update the quantity of an existing item
+    void updateQuantity(const std::string& name, int newQuantity) {
+        // Find the item and update its quantity
+        for (auto& item : inventory) {
+            if (item.getName() == name) {
+                item.updateQuantity(newQuantity);
+                return;
+            }
+        }
+        // If the item is not found, throw an exception
+        throw std::runtime_error("Item not found in inventory");
+    }
+
+    // Method to update the price of an existing item
+    void updatePrice(const std::string& name, double newPrice) {
+        // Find the item and update its price
+        for (auto& item : inventory) {
+            if (item.getName() == name) {
+                item.updatePrice(newPrice);
+                return;
+            }
+        }
+        // If the item is not found, throw an exception
+        throw std::runtime_error("Item not found in inventory");
+    }
+
+    // Method to display all items in the inventory
+    void displayInventory() const {
+        std::cout << "Current Inventory:\n";
+        std::cout << "-------------------\n";
+        for (const auto& item : inventory) {
+            std::cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity()
+                      << ", Price: $" << item.getPrice() << "\n";
+        }
+        std::cout << "-------------------\n";
+    }
+};
+
+// Main function to demonstrate the usage of the Inventory Management System
+int main() {
+    InventoryManager manager;
+
+    try {
+        // Add some items to the inventory
+        manager.addItem("Laptop", 10, 999.99);
+        manager.addItem("Mouse", 50, 19.99);
+        manager.addItem("Keyboard", 30, 49.99);
+
+        // Display the initial inventory
+        std::cout << "Initial Inventory:\n";
+        manager.displayInventory();
+
+        // Update the quantity of an item
+        manager.updateQuantity("Mouse", 45);
+
+        // Update the price of an item
+        manager.updatePrice("Laptop", 1099.99);
+
+        // Display the updated inventory
+        std::cout << "\nUpdated Inventory:\n";
+        manager.displayInventory();
+
+        // Try to add an item that already exists (this will throw an exception)
+        manager.addItem("Mouse", 20, 24.99);
+    }
+    catch (const std::exception& e) {
+        // Catch and display any exceptions that were thrown
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
