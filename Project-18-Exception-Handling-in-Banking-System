@@ -1,0 +1,197 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept> // For standard exceptions
+
+// Custom exception for insufficient funds
+class InsufficientFundsException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Insufficient funds in the account.";
+    }
+};
+
+// Custom exception for invalid input
+class InvalidInputException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Invalid input provided.";
+    }
+};
+
+// Class to represent a bank account
+class BankAccount {
+private:
+    std::string accountNumber;
+    std::string accountHolder;
+    double balance;
+
+public:
+    // Constructor to initialize the account
+    BankAccount(const std::string& number, const std::string& holder, double initialBalance)
+        : accountNumber(number), accountHolder(holder), balance(initialBalance) {}
+
+    // Method to deposit money
+    void deposit(double amount) {
+        if (amount <= 0) {
+            throw InvalidInputException();
+        }
+        balance += amount;
+        std::cout << "Deposited $" << amount << ". New balance: $" << balance << std::endl;
+    }
+
+    // Method to withdraw money
+    void withdraw(double amount) {
+        if (amount <= 0) {
+            throw InvalidInputException();
+        }
+        if (amount > balance) {
+            throw InsufficientFundsException();
+        }
+        balance -= amount;
+        std::cout << "Withdrawn $" << amount << ". New balance: $" << balance << std::endl;
+    }
+
+    // Method to check balance
+    double getBalance() const {
+        return balance;
+    }
+
+    // Method to get account information
+    std::string getInfo() const {
+        return "Account: " + accountNumber + ", Holder: " + accountHolder + ", Balance: $" + std::to_string(balance);
+    }
+};
+
+// Class to manage multiple bank accounts
+class Bank {
+private:
+    std::vector<BankAccount> accounts;
+
+public:
+    // Method to add a new account
+    void addAccount(const std::string& number, const std::string& holder, double initialBalance) {
+        accounts.emplace_back(number, holder, initialBalance);
+        std::cout << "Account created successfully." << std::endl;
+    }
+
+    // Method to find an account by account number
+    BankAccount* findAccount(const std::string& number) {
+        for (auto& account : accounts) {
+            if (account.getInfo().find(number) != std::string::npos) {
+                return &account;
+            }
+        }
+        return nullptr;
+    }
+};
+
+// Function to get a valid double input from the user
+double getValidDoubleInput() {
+    double input;
+    while (true) {
+        std::cout << "Enter amount: $";
+        if (std::cin >> input) {
+            return input;
+        } else {
+            std::cout << "Invalid input. Please enter a valid number." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+}
+
+int main() {
+    Bank bank;
+    std::string accountNumber, accountHolder;
+    double initialBalance;
+
+    // Create a sample account
+    std::cout << "Creating a sample account..." << std::endl;
+    bank.addAccount("12345", "John Doe", 1000.0);
+
+    while (true) {
+        std::cout << "\n1. Create Account\n2. Deposit\n3. Withdraw\n4. Check Balance\n5. Exit\n";
+        std::cout << "Enter your choice: ";
+        int choice;
+        std::cin >> choice;
+
+        if (choice == 5) {
+            std::cout << "Thank you for using our banking system. Goodbye!" << std::endl;
+            break;
+        }
+
+        switch (choice) {
+            case 1: {
+                // Create a new account
+                std::cout << "Enter account number: ";
+                std::cin >> accountNumber;
+                std::cout << "Enter account holder name: ";
+                std::cin.ignore();
+                std::getline(std::cin, accountHolder);
+                std::cout << "Enter initial balance: $";
+                std::cin >> initialBalance;
+
+                try {
+                    bank.addAccount(accountNumber, accountHolder, initialBalance);
+                } catch (const std::exception& e) {
+                    std::cout << "Error: " << e.what() << std::endl;
+                }
+                break;
+            }
+            case 2: {
+                // Deposit money
+                std::cout << "Enter account number: ";
+                std::cin >> accountNumber;
+                BankAccount* account = bank.findAccount(accountNumber);
+                if (account) {
+                    try {
+                        double amount = getValidDoubleInput();
+                        account->deposit(amount);
+                    } catch (const InvalidInputException& e) {
+                        std::cout << "Error: " << e.what() << std::endl;
+                    }
+                } else {
+                    std::cout << "Account not found." << std::endl;
+                }
+                break;
+            }
+            case 3: {
+                // Withdraw money
+                std::cout << "Enter account number: ";
+                std::cin >> accountNumber;
+                BankAccount* account = bank.findAccount(accountNumber);
+                if (account) {
+                    try {
+                        double amount = getValidDoubleInput();
+                        account->withdraw(amount);
+                    } catch (const InsufficientFundsException& e) {
+                        std::cout << "Error: " << e.what() << std::endl;
+                    } catch (const InvalidInputException& e) {
+                        std::cout << "Error: " << e.what() << std::endl;
+                    }
+                } else {
+                    std::cout << "Account not found." << std::endl;
+                }
+                break;
+            }
+            case 4: {
+                // Check balance
+                std::cout << "Enter account number: ";
+                std::cin >> accountNumber;
+                BankAccount* account = bank.findAccount(accountNumber);
+                if (account) {
+                    std::cout << account->getInfo() << std::endl;
+                } else {
+                    std::cout << "Account not found." << std::endl;
+                }
+                break;
+            }
+            default:
+                std::cout << "Invalid choice. Please try again." << std::endl;
+        }
+    }
+
+    return 0;
+}
+OVER
