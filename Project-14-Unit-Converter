@@ -1,0 +1,85 @@
+#include <iostream>
+using namespace std;
+
+// Function to convert kilometers to miles
+double kilometersToMiles(double kilometers) {
+    return kilometers * 0.621371;
+}
+
+// Function to convert miles to kilometers
+double milesToKilometers(double miles) {
+    return miles / 0.621371;
+}
+
+// Function to convert kilograms to pounds
+double kilogramsToPounds(double kilograms) {
+    return kilograms * 2.20462;
+}
+
+// Function to convert pounds to kilograms
+double poundsToKilograms(double pounds) {
+    return pounds / 2.20462;
+}
+
+// Function to convert liters to gallons
+double litersToGallons(double liters) {
+    return liters * 0.264172;
+}
+
+// Function to convert gallons to liters
+double gallonsToLiters(double gallons) {
+    return gallons / 0.264172;
+}
+
+int main() {
+    int choice;
+    double value, result;
+
+    // Display the menu to the user
+    cout << "Unit Converter" << endl;
+    cout << "1. Kilometers to Miles" << endl;
+    cout << "2. Miles to Kilometers" << endl;
+    cout << "3. Kilograms to Pounds" << endl;
+    cout << "4. Pounds to Kilograms" << endl;
+    cout << "5. Liters to Gallons" << endl;
+    cout << "6. Gallons to Liters" << endl;
+    cout << "Enter your choice (1-6): ";
+    cin >> choice;
+
+    // Ask the user to enter the value to be converted
+    cout << "Enter the value to be converted: ";
+    cin >> value;
+
+    // Perform the conversion based on the user's choice
+    switch (choice) {
+        case 1:
+            result = kilometersToMiles(value);
+            cout << value << " kilometers is equal to " << result << " miles." << endl;
+            break;
+        case 2:
+            result = milesToKilometers(value);
+            cout << value << " miles is equal to " << result << " kilometers." << endl;
+            break;
+        case 3:
+            result = kilogramsToPounds(value);
+            cout << value << " kilograms is equal to " << result << " pounds." << endl;
+            break;
+        case 4:
+            result = poundsToKilograms(value);
+            cout << value << " pounds is equal to " << result << " kilograms." << endl;
+            break;
+        case 5:
+            result = litersToGallons(value);
+            cout << value << " liters is equal to " << result << " gallons." << endl;
+            break;
+        case 6:
+            result = gallonsToLiters(value);
+            cout << value << " gallons is equal to " << result << " liters." << endl;
+            break;
+        default:
+            cout << "Invalid choice!" << endl;
+            break;
+    }
+
+    return 0;
+}
