@@ -1,0 +1,194 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+// Base class for Vehicle
+class Vehicle {
+protected:
+    std::string licensePlate;
+    bool isRented;
+
+public:
+    Vehicle(const std::string& plate) : licensePlate(plate), isRented(false) {}
+
+    virtual void displayInfo() const {
+        std::cout << "License Plate: " << licensePlate << "\n";
+        std::cout << "Rented: " << (isRented ? "Yes" : "No") << "\n";
+    }
+
+    void rent() {
+        if (!isRented) {
+            isRented = true;
+            std::cout << "Vehicle rented successfully.\n";
+        } else {
+            std::cout << "Vehicle is already rented.\n";
+        }
+    }
+
+    void returnVehicle() {
+        if (isRented) {
+            isRented = false;
+            std::cout << "Vehicle returned successfully.\n";
+        } else {
+            std::cout << "Vehicle was not rented.\n";
+        }
+    }
+
+    bool getRentalStatus() const {
+        return isRented;
+    }
+
+    std::string getLicensePlate() const {
+        return licensePlate;
+    }
+};
+
+// Derived class for Car
+class Car : public Vehicle {
+public:
+    Car(const std::string& plate) : Vehicle(plate) {}
+
+    void displayInfo() const override {
+        std::cout << "Car - ";
+        Vehicle::displayInfo();
+    }
+};
+
+// Derived class for Bike
+class Bike : public Vehicle {
+public:
+    Bike(const std::string& plate) : Vehicle(plate) {}
+
+    void displayInfo() const override {
+        std::cout << "Bike - ";
+        Vehicle::displayInfo();
+    }
+};
+
+// Derived class for Bus
+class Bus : public Vehicle {
+public:
+    Bus(const std::string& plate) : Vehicle(plate) {}
+
+    void displayInfo() const override {
+        std::cout << "Bus - ";
+        Vehicle::displayInfo();
+    }
+};
+
+// Function to display menu options
+void displayMenu() {
+    std::cout << "\nVehicle Rental System\n";
+    std::cout << "1. Add Vehicle\n";
+    std::cout << "2. Rent Vehicle\n";
+    std::cout << "3. Return Vehicle\n";
+    std::cout << "4. Display All Vehicles\n";
+    std::cout << "5. Exit\n";
+    std::cout << "Enter your choice: ";
+}
+
+// Function to add a vehicle to the system
+void addVehicle(std::vector<Vehicle*>& vehicles) {
+    int type;
+    std::string plate;
+
+    std::cout << "Enter vehicle type (1: Car, 2: Bike, 3: Bus): ";
+    std::cin >> type;
+    std::cout << "Enter license plate: ";
+    std::cin >> plate;
+
+    switch (type) {
+        case 1:
+            vehicles.push_back(new Car(plate));
+            break;
+        case 2:
+            vehicles.push_back(new Bike(plate));
+            break;
+        case 3:
+            vehicles.push_back(new Bus(plate));
+            break;
+        default:
+            std::cout << "Invalid vehicle type.\n";
+            return;
+    }
+
+    std::cout << "Vehicle added successfully.\n";
+}
+
+// Function to rent a vehicle
+void rentVehicle(std::vector<Vehicle*>& vehicles) {
+    std::string plate;
+    std::cout << "Enter license plate of the vehicle to rent: ";
+    std::cin >> plate;
+
+    for (auto& vehicle : vehicles) {
+        if (vehicle->getLicensePlate() == plate) {
+            vehicle->rent();
+            return;
+        }
+    }
+
+    std::cout << "Vehicle not found.\n";
+}
+
+// Function to return a rented vehicle
+void returnVehicle(std::vector<Vehicle*>& vehicles) {
+    std::string plate;
+    std::cout << "Enter license plate of the vehicle to return: ";
+    std::cin >> plate;
+
+    for (auto& vehicle : vehicles) {
+        if (vehicle->getLicensePlate() == plate) {
+            vehicle->returnVehicle();
+            return;
+        }
+    }
+
+    std::cout << "Vehicle not found.\n";
+}
+
+// Function to display all vehicles
+void displayAllVehicles(const std::vector<Vehicle*>& vehicles) {
+    for (const auto& vehicle : vehicles) {
+        vehicle->displayInfo();
+        std::cout << "-------------------\n";
+    }
+}
+
+int main() {
+    std::vector<Vehicle*> vehicles;
+    int choice;
+
+    while (true) {
+        displayMenu();
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addVehicle(vehicles);
+                break;
+            case 2:
+                rentVehicle(vehicles);
+                break;
+            case 3:
+                returnVehicle(vehicles);
+                break;
+            case 4:
+                displayAllVehicles(vehicles);
+                break;
+            case 5:
+                std::cout << "Exiting the system.\n";
+                // Clean up dynamically allocated memory
+                for (auto& vehicle : vehicles) {
+                    delete vehicle;
+                }
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
+
+// OVER
