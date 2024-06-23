@@ -1,0 +1,41 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int main() {
+    // Declare a string variable to hold the file name
+    std::string fileName;
+
+    // Prompt the user to enter the name of the file to read
+    std::cout << "Enter the name of the file to read: ";
+    std::cin >> fileName;
+
+    // Create an ifstream object to open and read from the file
+    std::ifstream inputFile(fileName);
+
+    // Check if the file was successfully opened
+    if (!inputFile) {
+        // If the file could not be opened, display an error message and exit the program
+        std::cerr << "Error: Could not open the file " << fileName << std::endl;
+        return 1; // Return a non-zero value to indicate an error
+    }
+
+    // Declare a string variable to hold each line of the file
+    std::string line;
+
+    // Use a while loop to read each line from the file
+    while (std::getline(inputFile, line)) {
+        // Display the current line on the screen
+        std::cout << line << std::endl;
+    }
+
+    // Close the file after reading all the lines
+    inputFile.close();
+
+    // Indicate that the program has finished successfully
+    std::cout << "File reading completed successfully." << std::endl;
+
+    return 0; // Return 0 to indicate that the program finished successfully
+}
+
+// OVER
