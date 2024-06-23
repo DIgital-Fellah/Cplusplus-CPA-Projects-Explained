@@ -1,0 +1,115 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+// Base class for all game characters
+class GameCharacter {
+protected:
+    std::string name;
+    int health;
+    int attackPower;
+
+public:
+    // Constructor to initialize the character's attributes
+    GameCharacter(std::string n, int h, int a) : name(n), health(h), attackPower(a) {}
+
+    // Virtual function to display character details
+    virtual void display() {
+        std::cout << "Name: " << name << "\nHealth: " << health << "\nAttack Power: " << attackPower << std::endl;
+    }
+
+    // Virtual function to perform an attack
+    virtual void attack() {
+        std::cout << name << " attacks with power " << attackPower << "!" << std::endl;
+    }
+
+    // Virtual destructor
+    virtual ~GameCharacter() {}
+};
+
+// Derived class for Warrior
+class Warrior : public GameCharacter {
+private:
+    int armor;
+
+public:
+    // Constructor to initialize Warrior-specific attributes
+    Warrior(std::string n, int h, int a, int ar) : GameCharacter(n, h, a), armor(ar) {}
+
+    // Override display function to include armor
+    void display() override {
+        GameCharacter::display();
+        std::cout << "Armor: " << armor << std::endl;
+    }
+
+    // Override attack function to include a special attack message
+    void attack() override {
+        std::cout << name << " swings a sword with power " << attackPower << "!" << std::endl;
+    }
+};
+
+// Derived class for Mage
+class Mage : public GameCharacter {
+private:
+    int mana;
+
+public:
+    // Constructor to initialize Mage-specific attributes
+    Mage(std::string n, int h, int a, int m) : GameCharacter(n, h, a), mana(m) {}
+
+    // Override display function to include mana
+    void display() override {
+        GameCharacter::display();
+        std::cout << "Mana: " << mana << std::endl;
+    }
+
+    // Override attack function to include a special attack message
+    void attack() override {
+        std::cout << name << " casts a spell with power " << attackPower << "!" << std::endl;
+    }
+};
+
+// Derived class for Archer
+class Archer : public GameCharacter {
+private:
+    int arrows;
+
+public:
+    // Constructor to initialize Archer-specific attributes
+    Archer(std::string n, int h, int a, int ar) : GameCharacter(n, h, a), arrows(ar) {}
+
+    // Override display function to include arrows
+    void display() override {
+        GameCharacter::display();
+        std::cout << "Arrows: " << arrows << std::endl;
+    }
+
+    // Override attack function to include a special attack message
+    void attack() override {
+        std::cout << name << " shoots an arrow with power " << attackPower << "!" << std::endl;
+    }
+};
+
+int main() {
+    // Create a vector to store different game characters
+    std::vector<GameCharacter*> characters;
+
+    // Add different types of characters to the vector
+    characters.push_back(new Warrior("Thor", 100, 20, 50));
+    characters.push_back(new Mage("Gandalf", 80, 25, 100));
+    characters.push_back(new Archer("Legolas", 90, 15, 30));
+
+    // Display details and perform attacks for each character
+    for (GameCharacter* character : characters) {
+        character->display();
+        character->attack();
+        std::cout << std::endl;
+    }
+
+    // Clean up dynamically allocated memory
+    for (GameCharacter* character : characters) {
+        delete character;
+    }
+
+    return 0;
+}
