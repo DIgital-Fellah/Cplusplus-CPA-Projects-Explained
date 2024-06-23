@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+
+// Function to calculate the average of a vector of grades
+double calculateAverage(const std::vector<double>& grades) {
+    double sum = 0.0;
+    // Loop through all grades and add them up
+    for (const double& grade : grades) {
+        sum += grade;
+    }
+    // Return the average (sum divided by number of grades)
+    return sum / grades.size();
+}
+
+// Function to determine the letter grade based on the numerical grade
+std::string determineLetterGrade(double average) {
+    if (average >= 90.0) return "A";
+    else if (average >= 80.0) return "B";
+    else if (average >= 70.0) return "C";
+    else if (average >= 60.0) return "D";
+    else return "F";
+}
+
+int main() {
+    std::vector<double> grades;  // Vector to store all the grades
+    double grade;  // Variable to temporarily hold each input grade
+    int studentCount = 0;  // Counter for the number of students
+
+    std::cout << "Welcome to the Grade Calculator!" << std::endl;
+    std::cout << "Enter student grades (enter a negative number to finish):" << std::endl;
+
+    // Loop to input grades until a negative number is entered
+    while (true) {
+        std::cout << "Enter grade for student " << (studentCount + 1) << ": ";
+        std::cin >> grade;
+
+        // Check if the input is valid (between 0 and 100)
+        if (grade < 0) {
+            break;  // Exit the loop if a negative number is entered
+        } else if (grade > 100) {
+            std::cout << "Invalid grade. Please enter a grade between 0 and 100." << std::endl;
+            continue;  // Skip this iteration and ask for input again
+        }
+
+        grades.push_back(grade);  // Add the valid grade to the vector
+        studentCount++;  // Increment the student count
+    }
+
+    // Check if any grades were entered
+    if (grades.empty()) {
+        std::cout << "No grades were entered. Exiting program." << std::endl;
+        return 0;
+    }
+
+    // Calculate the average grade
+    double averageGrade = calculateAverage(grades);
+
+    // Determine the letter grade
+    std::string letterGrade = determineLetterGrade(averageGrade);
+
+    // Display the results
+    std::cout << std::fixed << std::setprecision(2);  // Set output to display 2 decimal places
+    std::cout << "\nResults:" << std::endl;
+    std::cout << "Number of students: " << studentCount << std::endl;
+    std::cout << "Average grade: " << averageGrade << std::endl;
+    std::cout << "Letter grade: " << letterGrade << std::endl;
+
+    return 0;
+}
+OVER
