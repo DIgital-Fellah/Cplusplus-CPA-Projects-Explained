@@ -1,0 +1,57 @@
+#include <iostream> // Include the iostream library for input and output
+
+// Function to generate and print the first N Fibonacci numbers
+void generateFibonacci(int N) {
+    // Check if the number of terms is less than or equal to 0
+    if (N <= 0) {
+        std::cout << "Please enter a positive integer." << std::endl;
+        return;
+    }
+
+    // Declare the first two Fibonacci numbers
+    int first = 0, second = 1;
+
+    // Print the first Fibonacci number
+    std::cout << "Fibonacci Sequence: " << first;
+
+    // If N is 1, we are done
+    if (N == 1) {
+        std::cout << std::endl;
+        return;
+    }
+
+    // Print the second Fibonacci number
+    std::cout << ", " << second;
+
+    // Loop to generate the remaining Fibonacci numbers
+    for (int i = 3; i <= N; ++i) {
+        // Calculate the next Fibonacci number
+        int next = first + second;
+
+        // Print the next Fibonacci number
+        std::cout << ", " << next;
+
+        // Update the first and second numbers for the next iteration
+        first = second;
+        second = next;
+    }
+
+    // Print a newline character at the end
+    std::cout << std::endl;
+}
+
+int main() {
+    // Declare a variable to store the number of terms
+    int N;
+
+    // Prompt the user to enter the number of terms
+    std::cout << "Enter the number of terms in the Fibonacci sequence: ";
+    std::cin >> N;
+
+    // Call the function to generate and print the Fibonacci sequence
+    generateFibonacci(N);
+
+    return 0; // Return 0 to indicate successful execution
+}
+
+// OVER
