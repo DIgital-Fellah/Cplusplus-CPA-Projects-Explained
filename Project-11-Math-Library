@@ -1,0 +1,104 @@
+#include <iostream>
+#include <cmath>
+#include <stdexcept>
+
+// This is our custom math library namespace
+namespace MathLib {
+
+    // Function to calculate factorial of a number
+    // Factorial is the product of all positive integers less than or equal to n
+    // For example, factorial of 5 (written as 5!) = 5 * 4 * 3 * 2 * 1 = 120
+    unsigned long long factorial(int n) {
+        // Check if the input is negative
+        if (n < 0) {
+            throw std::invalid_argument("Factorial is not defined for negative numbers");
+        }
+        
+        // Initialize result to 1
+        unsigned long long result = 1;
+        
+        // Multiply result by each number from 1 to n
+        for (int i = 1; i <= n; ++i) {
+            result *= i;
+        }
+        
+        return result;
+    }
+
+    // Function to calculate power (x raised to the power of y)
+    double power(double x, int y) {
+        // Use the pow function from cmath library
+        return std::pow(x, y);
+    }
+
+    // Function to calculate square root
+    double squareRoot(double x) {
+        // Check if the input is negative
+        if (x < 0) {
+            throw std::invalid_argument("Square root is not defined for negative numbers");
+        }
+        
+        // Use the sqrt function from cmath library
+        return std::sqrt(x);
+    }
+
+    // Function to calculate absolute value
+    double absoluteValue(double x) {
+        // Use the abs function from cmath library
+        return std::abs(x);
+    }
+
+    // Function to calculate the natural logarithm
+    double naturalLog(double x) {
+        // Check if the input is less than or equal to 0
+        if (x <= 0) {
+            throw std::invalid_argument("Natural logarithm is not defined for non-positive numbers");
+        }
+        
+        // Use the log function from cmath library
+        return std::log(x);
+    }
+}
+
+// Main function - the entry point of our program
+int main() {
+    // Print a welcome message
+    std::cout << "Welcome to the Math Library Demo!" << std::endl;
+    std::cout << "This program demonstrates various mathematical functions." << std::endl;
+
+    // Demonstrate factorial
+    std::cout << "\nFactorial Demo:" << std::endl;
+    std::cout << "5! = " << MathLib::factorial(5) << std::endl;
+
+    // Demonstrate power
+    std::cout << "\nPower Demo:" << std::endl;
+    std::cout << "2^3 = " << MathLib::power(2, 3) << std::endl;
+
+    // Demonstrate square root
+    std::cout << "\nSquare Root Demo:" << std::endl;
+    std::cout << "√16 = " << MathLib::squareRoot(16) << std::endl;
+
+    // Demonstrate absolute value
+    std::cout << "\nAbsolute Value Demo:" << std::endl;
+    std::cout << "|-5| = " << MathLib::absoluteValue(-5) << std::endl;
+
+    // Demonstrate natural logarithm
+    std::cout << "\nNatural Logarithm Demo:" << std::endl;
+    std::cout << "ln(2.718) ≈ " << MathLib::naturalLog(2.718) << std::endl;
+
+    // Demonstrate exception handling
+    std::cout << "\nException Handling Demo:" << std::endl;
+    try {
+        std::cout << "Trying to calculate factorial of -1..." << std::endl;
+        MathLib::factorial(-1);
+    } catch (const std::invalid_argument& e) {
+        std::cout << "Caught an exception: " << e.what() << std::endl;
+    }
+
+    // Print a goodbye message
+    std::cout << "\nThank you for using the Math Library Demo!" << std::endl;
+
+    // Return 0 to indicate successful program execution
+    return 0;
+}
+OVER
