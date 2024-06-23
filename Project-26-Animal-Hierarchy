@@ -1,0 +1,139 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+// Base class for all animals
+class Animal {
+protected:
+    std::string name;
+    int age;
+
+public:
+    // Constructor
+    Animal(const std::string& name, int age) : name(name), age(age) {}
+
+    // Virtual destructor to ensure proper cleanup of derived classes
+    virtual ~Animal() {}
+
+    // Pure virtual function - makes Animal an abstract class
+    // This means we can't create an instance of Animal directly
+    virtual void makeSound() const = 0;
+
+    // Virtual function that can be overridden by derived classes
+    virtual void move() const {
+        std::cout << name << " is moving." << std::endl;
+    }
+
+    // Getter functions
+    std::string getName() const { return name; }
+    int getAge() const { return age; }
+
+    // Virtual function to display animal information
+    virtual void displayInfo() const {
+        std::cout << "Name: " << name << ", Age: " << age << std::endl;
+    }
+};
+
+// Derived class for mammals
+class Mammal : public Animal {
+protected:
+    std::string furColor;
+
+public:
+    // Constructor
+    Mammal(const std::string& name, int age, const std::string& furColor)
+        : Animal(name, age), furColor(furColor) {}
+
+    // Override the displayInfo function to include fur color
+    void displayInfo() const override {
+        Animal::displayInfo();  // Call the base class function
+        std::cout << "Fur Color: " << furColor << std::endl;
+    }
+};
+
+// Derived class for birds
+class Bird : public Animal {
+protected:
+    double wingspan;
+
+public:
+    // Constructor
+    Bird(const std::string& name, int age, double wingspan)
+        : Animal(name, age), wingspan(wingspan) {}
+
+    // Override the move function for birds
+    void move() const override {
+        std::cout << name << " is flying." << std::endl;
+    }
+
+    // Override the displayInfo function to include wingspan
+    void displayInfo() const override {
+        Animal::displayInfo();  // Call the base class function
+        std::cout << "Wingspan: " << wingspan << " cm" << std::endl;
+    }
+};
+
+// Specific mammal: Dog
+class Dog : public Mammal {
+public:
+    // Constructor
+    Dog(const std::string& name, int age, const std::string& furColor)
+        : Mammal(name, age, furColor) {}
+
+    // Implement the makeSound function for dogs
+    void makeSound() const override {
+        std::cout << name << " says: Woof!" << std::endl;
+    }
+};
+
+// Specific mammal: Cat
+class Cat : public Mammal {
+public:
+    // Constructor
+    Cat(const std::string& name, int age, const std::string& furColor)
+        : Mammal(name, age, furColor) {}
+
+    // Implement the makeSound function for cats
+    void makeSound() const override {
+        std::cout << name << " says: Meow!" << std::endl;
+    }
+};
+
+// Specific bird: Eagle
+class Eagle : public Bird {
+public:
+    // Constructor
+    Eagle(const std::string& name, int age, double wingspan)
+        : Bird(name, age, wingspan) {}
+
+    // Implement the makeSound function for eagles
+    void makeSound() const override {
+        std::cout << name << " says: Screech!" << std::endl;
+    }
+};
+
+int main() {
+    // Create a vector to store pointers to Animal objects
+    std::vector<Animal*> animals;
+
+    // Create instances of different animals
+    animals.push_back(new Dog("Buddy", 5, "Brown"));
+    animals.push_back(new Cat("Whiskers", 3, "White"));
+    animals.push_back(new Eagle("Freedom", 7, 200.5));
+
+    // Demonstrate polymorphism by iterating through the vector
+    for (const auto& animal : animals) {
+        std::cout << "--- Animal Information ---" << std::endl;
+        animal->displayInfo();
+        animal->makeSound();
+        animal->move();
+        std::cout << std::endl;
+    }
+
+    // Clean up the dynamically allocated memory
+    for (const auto& animal : animals) {
+        delete animal;
+    }
+
+    return 0;
+}
