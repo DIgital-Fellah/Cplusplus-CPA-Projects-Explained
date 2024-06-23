@@ -1,0 +1,97 @@
+#include <iostream>
+#include <cmath> // For mathematical functions like M_PI and sqrt
+
+// Base class for all shapes
+class Shape {
+public:
+    // Virtual function to calculate area
+    virtual double area() const = 0;
+
+    // Virtual function to calculate perimeter
+    virtual double perimeter() const = 0;
+
+    // Virtual destructor
+    virtual ~Shape() {}
+};
+
+// Derived class for Circle
+class Circle : public Shape {
+private:
+    double radius; // Radius of the circle
+
+public:
+    // Constructor to initialize the radius
+    Circle(double r) : radius(r) {}
+
+    // Override the area function
+    double area() const override {
+        return M_PI * radius * radius; // Area formula for circle: πr²
+    }
+
+    // Override the perimeter function
+    double perimeter() const override {
+        return 2 * M_PI * radius; // Perimeter formula for circle: 2πr
+    }
+};
+
+// Derived class for Rectangle
+class Rectangle : public Shape {
+private:
+    double length; // Length of the rectangle
+    double width;  // Width of the rectangle
+
+public:
+    // Constructor to initialize length and width
+    Rectangle(double l, double w) : length(l), width(w) {}
+
+    // Override the area function
+    double area() const override {
+        return length * width; // Area formula for rectangle: length * width
+    }
+
+    // Override the perimeter function
+    double perimeter() const override {
+        return 2 * (length + width); // Perimeter formula for rectangle: 2(length + width)
+    }
+};
+
+// Derived class for Triangle
+class Triangle : public Shape {
+private:
+    double a, b, c; // Sides of the triangle
+
+public:
+    // Constructor to initialize the sides
+    Triangle(double side1, double side2, double side3) : a(side1), b(side2), c(side3) {}
+
+    // Override the area function
+    double area() const override {
+        // Using Heron's formula to calculate the area of a triangle
+        double s = (a + b + c) / 2; // Semi-perimeter
+        return sqrt(s * (s - a) * (s - b) * (s - c)); // Area formula: √(s(s-a)(s-b)(s-c))
+    }
+
+    // Override the perimeter function
+    double perimeter() const override {
+        return a + b + c; // Perimeter formula for triangle: a + b + c
+    }
+};
+
+int main() {
+    // Create a Circle object with radius 5
+    Circle circle(5);
+    std::cout << "Circle Area: " << circle.area() << std::endl;
+    std::cout << "Circle Perimeter: " << circle.perimeter() << std::endl;
+
+    // Create a Rectangle object with length 4 and width 6
+    Rectangle rectangle(4, 6);
+    std::cout << "Rectangle Area: " << rectangle.area() << std::endl;
+    std::cout << "Rectangle Perimeter: " << rectangle.perimeter() << std::endl;
+
+    // Create a Triangle object with sides 3, 4, and 5
+    Triangle triangle(3, 4, 5);
+    std::cout << "Triangle Area: " << triangle.area() << std::endl;
+    std::cout << "Triangle Perimeter: " << triangle.perimeter() << std::endl;
+
+    return 0; // End of the program
+}
