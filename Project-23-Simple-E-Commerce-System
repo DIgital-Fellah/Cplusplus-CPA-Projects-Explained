@@ -1,0 +1,189 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+// Product class to represent items in the e-commerce system
+class Product {
+private:
+    int id;
+    std::string name;
+    double price;
+
+public:
+    // Constructor to initialize a product
+    Product(int _id, std::string _name, double _price) : id(_id), name(_name), price(_price) {}
+
+    // Getter methods to access private members
+    int getId() const { return id; }
+    std::string getName() const { return name; }
+    double getPrice() const { return price; }
+
+    // Method to display product information
+    void display() const {
+        std::cout << "ID: " << id << ", Name: " << name << ", Price: $" << price << std::endl;
+    }
+};
+
+// Customer class to represent users of the e-commerce system
+class Customer {
+private:
+    int id;
+    std::string name;
+    std::string email;
+
+public:
+    // Constructor to initialize a customer
+    Customer(int _id, std::string _name, std::string _email) : id(_id), name(_name), email(_email) {}
+
+    // Getter methods to access private members
+    int getId() const { return id; }
+    std::string getName() const { return name; }
+    std::string getEmail() const { return email; }
+
+    // Method to display customer information
+    void display() const {
+        std::cout << "ID: " << id << ", Name: " << name << ", Email: " << email << std::endl;
+    }
+};
+
+// Order class to represent purchases made by customers
+class Order {
+private:
+    int id;
+    int customerId;
+    std::vector<Product> products;
+
+public:
+    // Constructor to initialize an order
+    Order(int _id, int _customerId) : id(_id), customerId(_customerId) {}
+
+    // Method to add a product to the order
+    void addProduct(const Product& product) {
+        products.push_back(product);
+    }
+
+    // Method to calculate the total price of the order
+    double getTotalPrice() const {
+        double total = 0;
+        for (const auto& product : products) {
+            total += product.getPrice();
+        }
+        return total;
+    }
+
+    // Method to display order information
+    void display() const {
+        std::cout << "Order ID: " << id << ", Customer ID: " << customerId << std::endl;
+        std::cout << "Products:" << std::endl;
+        for (const auto& product : products) {
+            product.display();
+        }
+        std::cout << "Total Price: $" << getTotalPrice() << std::endl;
+    }
+};
+
+// ECommerceSystem class to manage products, customers, and orders
+class ECommerceSystem {
+private:
+    std::vector<Product> products;
+    std::vector<Customer> customers;
+    std::vector<Order> orders;
+    int nextOrderId = 1;
+
+public:
+    // Method to add a product to the system
+    void addProduct(const Product& product) {
+        products.push_back(product);
+    }
+
+    // Method to add a customer to the system
+    void addCustomer(const Customer& customer) {
+        customers.push_back(customer);
+    }
+
+    // Method to create a new order
+    void createOrder(int customerId, const std::vector<int>& productIds) {
+        // Check if the customer exists
+        auto customerIt = std::find_if(customers.begin(), customers.end(),
+            [customerId](const Customer& c) { return c.getId() == customerId; });
+
+        if (customerIt == customers.end()) {
+            std::cout << "Customer not found." << std::endl;
+            return;
+        }
+
+        // Create a new order
+        Order order(nextOrderId++, customerId);
+
+        // Add products to the order
+        for (int productId : productIds) {
+            auto productIt = std::find_if(products.begin(), products.end(),
+                [productId](const Product& p) { return p.getId() == productId; });
+
+            if (productIt != products.end()) {
+                order.addProduct(*productIt);
+            } else {
+                std::cout << "Product with ID " << productId << " not found." << std::endl;
+            }
+        }
+
+        // Add the order to the system
+        orders.push_back(order);
+        std::cout << "Order created successfully." << std::endl;
+    }
+
+    // Method to display all products
+    void displayProducts() const {
+        std::cout << "Products:" << std::endl;
+        for (const auto& product : products) {
+            product.display();
+        }
+    }
+
+    // Method to display all customers
+    void displayCustomers() const {
+        std::cout << "Customers:" << std::endl;
+        for (const auto& customer : customers) {
+            customer.display();
+        }
+    }
+
+    // Method to display all orders
+    void displayOrders() const {
+        std::cout << "Orders:" << std::endl;
+        for (const auto& order : orders) {
+            order.display();
+            std::cout << std::endl;
+        }
+    }
+};
+
+int main() {
+    // Create an instance of the ECommerceSystem
+    ECommerceSystem ecommerce;
+
+    // Add some products to the system
+    ecommerce.addProduct(Product(1, "Laptop", 999.99));
+    ecommerce.addProduct(Product(2, "Smartphone", 499.99));
+    ecommerce.addProduct(Product(3, "Headphones", 79.99));
+
+    // Add some customers to the system
+    ecommerce.addCustomer(Customer(1, "John Doe", "john@example.com"));
+    ecommerce.addCustomer(Customer(2, "Jane Smith", "jane@example.com"));
+
+    // Display all products and customers
+    ecommerce.displayProducts();
+    std::cout << std::endl;
+    ecommerce.displayCustomers();
+    std::cout << std::endl;
+
+    // Create some orders
+    ecommerce.createOrder(1, {1, 3}); // John Doe orders a laptop and headphones
+    ecommerce.createOrder(2, {2}); // Jane Smith orders a smartphone
+
+    // Display all orders
+    ecommerce.displayOrders();
+
+    return 0;
+}
