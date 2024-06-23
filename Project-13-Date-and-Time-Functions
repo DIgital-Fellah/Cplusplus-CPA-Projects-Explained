@@ -1,0 +1,108 @@
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <iomanip>
+
+// Function to get the current date and time
+std::string getCurrentDateTime() {
+    // Get the current time
+    std::time_t now = std::time(nullptr);
+    
+    // Convert the time to a local time structure
+    std::tm* localTime = std::localtime(&now);
+    
+    // Create a string stream to format the date and time
+    std::ostringstream oss;
+    
+    // Format the date and time (YYYY-MM-DD HH:MM:SS)
+    oss << std::put_time(localTime, "%Y-%m-%d %H:%M:%S");
+    
+    // Return the formatted string
+    return oss.str();
+}
+
+// Function to add days to a given date
+std::string addDays(const std::string& date, int days) {
+    // Create a time structure
+    std::tm timeInfo = {};
+    
+    // Parse the input date string
+    std::istringstream ss(date);
+    ss >> std::get_time(&timeInfo, "%Y-%m-%d");
+    
+    // Convert the time structure to time_t
+    std::time_t time = std::mktime(&timeInfo);
+    
+    // Add the specified number of days
+    time += days * 24 * 60 * 60;
+    
+    // Convert back to local time
+    timeInfo = *std::localtime(&time);
+    
+    // Format the new date
+    std::ostringstream oss;
+    oss << std::put_time(&timeInfo, "%Y-%m-%d");
+    
+    return oss.str();
+}
+
+// Function to calculate the difference between two dates in days
+int dateDifference(const std::string& date1, const std::string& date2) {
+    // Create time structures for both dates
+    std::tm timeInfo1 = {}, timeInfo2 = {};
+    
+    // Parse the input date strings
+    std::istringstream ss1(date1), ss2(date2);
+    ss1 >> std::get_time(&timeInfo1, "%Y-%m-%d");
+    ss2 >> std::get_time(&timeInfo2, "%Y-%m-%d");
+    
+    // Convert the time structures to time_t
+    std::time_t time1 = std::mktime(&timeInfo1);
+    std::time_t time2 = std::mktime(&timeInfo2);
+    
+    // Calculate the difference in seconds and convert to days
+    return std::difftime(time2, time1) / (24 * 60 * 60);
+}
+
+// Function to format a date string
+std::string formatDate(const std::string& date, const std::string& format) {
+    // Create a time structure
+    std::tm timeInfo = {};
+    
+    // Parse the input date string
+    std::istringstream ss(date);
+    ss >> std::get_time(&timeInfo, "%Y-%m-%d");
+    
+    // Format the date according to the specified format
+    std::ostringstream oss;
+    oss << std::put_time(&timeInfo, format.c_str());
+    
+    return oss.str();
+}
+
+int main() {
+    // Demonstrate the usage of date and time functions
+    
+    // 1. Get and display the current date and time
+    std::cout << "Current Date and Time: " << getCurrentDateTime() << std::endl;
+    
+    // 2. Add days to a date
+    std::string startDate = "2023-06-23";
+    int daysToAdd = 10;
+    std::string newDate = addDays(startDate, daysToAdd);
+    std::cout << "Date after adding " << daysToAdd << " days to " << startDate << ": " << newDate << std::endl;
+    
+    // 3. Calculate the difference between two dates
+    std::string date1 = "2023-06-23";
+    std::string date2 = "2023-07-15";
+    int difference = dateDifference(date1, date2);
+    std::cout << "Difference between " << date1 << " and " << date2 << ": " << difference << " days" << std::endl;
+    
+    // 4. Format a date string
+    std::string dateToFormat = "2023-06-23";
+    std::string formattedDate = formatDate(dateToFormat, "%B %d, %Y");
+    std::cout << "Formatted date: " << formattedDate << std::endl;
+    
+    return 0;
+}
+OVER
