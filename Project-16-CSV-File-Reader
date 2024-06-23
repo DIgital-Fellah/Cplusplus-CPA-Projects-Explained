@@ -1,0 +1,62 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+
+// Function to split a string into a vector of strings based on a delimiter
+std::vector<std::string> split(const std::string& s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
+int main() {
+    // Declare variables
+    std::string filename;
+    std::string line;
+    std::vector<std::vector<std::string>> data;
+
+    // Ask the user for the filename
+    std::cout << "Enter the name of the CSV file: ";
+    std::cin >> filename;
+
+    // Open the file
+    std::ifstream file(filename);
+
+    // Check if the file was successfully opened
+    if (!file.is_open()) {
+        std::cout << "Error opening file!" << std::endl;
+        return 1; // Exit the program with an error code
+    }
+
+    // Read the file line by line
+    while (std::getline(file, line)) {
+        // Split each line into fields
+        std::vector<std::string> fields = split(line, ',');
+        
+        // Add the fields to our data vector
+        data.push_back(fields);
+    }
+
+    // Close the file
+    file.close();
+
+    // Print the data
+    for (size_t i = 0; i < data.size(); ++i) {
+        std::cout << "Row " << i + 1 << ": ";
+        for (size_t j = 0; j < data[i].size(); ++j) {
+            std::cout << data[i][j];
+            if (j < data[i].size() - 1) {
+                std::cout << " | ";
+            }
+        }
+        std::cout << std::endl;
+    }
+
+    return 0; // Exit the program successfully
+}
