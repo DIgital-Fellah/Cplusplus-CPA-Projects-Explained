@@ -1,0 +1,149 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Class to represent a student
+class Student {
+private:
+    string name;
+    int age;
+    string studentID;
+
+public:
+    // Constructor to initialize a student
+    Student(string n, int a, string id) : name(n), age(a), studentID(id) {}
+
+    // Function to display student details
+    void display() {
+        cout << "Name: " << name << ", Age: " << age << ", Student ID: " << studentID << endl;
+    }
+
+    // Function to get the student ID
+    string getID() {
+        return studentID;
+    }
+
+    // Function to update student details
+    void update(string n, int a) {
+        name = n;
+        age = a;
+    }
+};
+
+// Class to manage a list of students
+class StudentManagementSystem {
+private:
+    vector<Student> students;
+
+public:
+    // Function to add a new student
+    void addStudent(string name, int age, string studentID) {
+        Student newStudent(name, age, studentID);
+        students.push_back(newStudent);
+        cout << "Student added successfully!" << endl;
+    }
+
+    // Function to display all students
+    void displayAllStudents() {
+        for (Student &student : students) {
+            student.display();
+        }
+    }
+
+    // Function to find a student by ID
+    Student* findStudentByID(string studentID) {
+        for (Student &student : students) {
+            if (student.getID() == studentID) {
+                return &student;
+            }
+        }
+        return nullptr;
+    }
+
+    // Function to update a student's details
+    void updateStudent(string studentID, string newName, int newAge) {
+        Student* student = findStudentByID(studentID);
+        if (student != nullptr) {
+            student->update(newName, newAge);
+            cout << "Student details updated successfully!" << endl;
+        } else {
+            cout << "Student not found!" << endl;
+        }
+    }
+
+    // Function to delete a student by ID
+    void deleteStudent(string studentID) {
+        for (auto it = students.begin(); it != students.end(); ++it) {
+            if (it->getID() == studentID) {
+                students.erase(it);
+                cout << "Student deleted successfully!" << endl;
+                return;
+            }
+        }
+        cout << "Student not found!" << endl;
+    }
+};
+
+int main() {
+    StudentManagementSystem sms;
+    int choice;
+    string name, studentID;
+    int age;
+
+    do {
+        // Display menu options
+        cout << "Student Management System" << endl;
+        cout << "1. Add Student" << endl;
+        cout << "2. Display All Students" << endl;
+        cout << "3. Update Student" << endl;
+        cout << "4. Delete Student" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                // Add a new student
+                cout << "Enter name: ";
+                cin >> name;
+                cout << "Enter age: ";
+                cin >> age;
+                cout << "Enter student ID: ";
+                cin >> studentID;
+                sms.addStudent(name, age, studentID);
+                break;
+            case 2:
+                // Display all students
+                sms.displayAllStudents();
+                break;
+            case 3:
+                // Update a student's details
+                cout << "Enter student ID to update: ";
+                cin >> studentID;
+                cout << "Enter new name: ";
+                cin >> name;
+                cout << "Enter new age: ";
+                cin >> age;
+                sms.updateStudent(studentID, name, age);
+                break;
+            case 4:
+                // Delete a student
+                cout << "Enter student ID to delete: ";
+                cin >> studentID;
+                sms.deleteStudent(studentID);
+                break;
+            case 5:
+                // Exit the program
+                cout << "Exiting..." << endl;
+                break;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+
+// OVER
