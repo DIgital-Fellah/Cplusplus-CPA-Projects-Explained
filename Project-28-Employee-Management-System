@@ -1,0 +1,114 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+// Base class for Employee
+class Employee {
+protected:
+    std::string name;
+    int id;
+    double salary;
+
+public:
+    // Constructor to initialize Employee
+    Employee(std::string name, int id, double salary) : name(name), id(id), salary(salary) {}
+
+    // Virtual function to display employee details
+    virtual void display() {
+        std::cout << "Name: " << name << ", ID: " << id << ", Salary: $" << salary << std::endl;
+    }
+
+    // Virtual function to calculate salary (can be overridden by derived classes)
+    virtual double calculateSalary() {
+        return salary;
+    }
+};
+
+// Derived class for FullTimeEmployee
+class FullTimeEmployee : public Employee {
+public:
+    // Constructor to initialize FullTimeEmployee
+    FullTimeEmployee(std::string name, int id, double salary) : Employee(name, id, salary) {}
+
+    // Override display function
+    void display() override {
+        std::cout << "Full-Time Employee - ";
+        Employee::display();
+    }
+};
+
+// Derived class for PartTimeEmployee
+class PartTimeEmployee : public Employee {
+private:
+    int hoursWorked;
+    double hourlyRate;
+
+public:
+    // Constructor to initialize PartTimeEmployee
+    PartTimeEmployee(std::string name, int id, int hoursWorked, double hourlyRate)
+        : Employee(name, id, hoursWorked * hourlyRate), hoursWorked(hoursWorked), hourlyRate(hourlyRate) {}
+
+    // Override display function
+    void display() override {
+        std::cout << "Part-Time Employee - ";
+        Employee::display();
+        std::cout << "Hours Worked: " << hoursWorked << ", Hourly Rate: $" << hourlyRate << std::endl;
+    }
+
+    // Override calculateSalary function
+    double calculateSalary() override {
+        return hoursWorked * hourlyRate;
+    }
+};
+
+// Derived class for Contractor
+class Contractor : public Employee {
+private:
+    double contractAmount;
+
+public:
+    // Constructor to initialize Contractor
+    Contractor(std::string name, int id, double contractAmount)
+        : Employee(name, id, contractAmount), contractAmount(contractAmount) {}
+
+    // Override display function
+    void display() override {
+        std::cout << "Contractor - ";
+        Employee::display();
+        std::cout << "Contract Amount: $" << contractAmount << std::endl;
+    }
+
+    // Override calculateSalary function
+    double calculateSalary() override {
+        return contractAmount;
+    }
+};
+
+// Function to display all employees
+void displayAllEmployees(const std::vector<Employee*>& employees) {
+    for (const auto& employee : employees) {
+        employee->display();
+        std::cout << "Calculated Salary: $" << employee->calculateSalary() << std::endl;
+        std::cout << "-----------------------------" << std::endl;
+    }
+}
+
+int main() {
+    // Create a vector to store pointers to Employee objects
+    std::vector<Employee*> employees;
+
+    // Add different types of employees to the vector
+    employees.push_back(new FullTimeEmployee("Alice", 1, 50000));
+    employees.push_back(new PartTimeEmployee("Bob", 2, 20, 25));
+    employees.push_back(new Contractor("Charlie", 3, 30000));
+
+    // Display all employees
+    displayAllEmployees(employees);
+
+    // Clean up dynamically allocated memory
+    for (auto& employee : employees) {
+        delete employee;
+    }
+
+    return 0;
+}
