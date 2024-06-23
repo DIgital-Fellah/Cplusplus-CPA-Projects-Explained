@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+
+// Base class for all types of transport
+class Transport {
+protected:
+    std::string brand;
+    int year;
+
+public:
+    // Constructor to initialize brand and year
+    Transport(const std::string& brand, int year) : brand(brand), year(year) {}
+
+    // Virtual method to display transport details
+    virtual void displayDetails() const {
+        std::cout << "Brand: " << brand << ", Year: " << year << std::endl;
+    }
+
+    // Virtual destructor
+    virtual ~Transport() {}
+};
+
+// Derived class for Car
+class Car : public Transport {
+private:
+    int numberOfDoors;
+
+public:
+    // Constructor to initialize brand, year, and number of doors
+    Car(const std::string& brand, int year, int numberOfDoors)
+        : Transport(brand, year), numberOfDoors(numberOfDoors) {}
+
+    // Override displayDetails method to include number of doors
+    void displayDetails() const override {
+        Transport::displayDetails();
+        std::cout << "Number of Doors: " << numberOfDoors << std::endl;
+    }
+};
+
+// Derived class for Bike
+class Bike : public Transport {
+private:
+    bool hasCarrier;
+
+public:
+    // Constructor to initialize brand, year, and carrier status
+    Bike(const std::string& brand, int year, bool hasCarrier)
+        : Transport(brand, year), hasCarrier(hasCarrier) {}
+
+    // Override displayDetails method to include carrier status
+    void displayDetails() const override {
+        Transport::displayDetails();
+        std::cout << "Has Carrier: " << (hasCarrier ? "Yes" : "No") << std::endl;
+    }
+};
+
+// Derived class for Bus
+class Bus : public Transport {
+private:
+    int seatingCapacity;
+
+public:
+    // Constructor to initialize brand, year, and seating capacity
+    Bus(const std::string& brand, int year, int seatingCapacity)
+        : Transport(brand, year), seatingCapacity(seatingCapacity) {}
+
+    // Override displayDetails method to include seating capacity
+    void displayDetails() const override {
+        Transport::displayDetails();
+        std::cout << "Seating Capacity: " << seatingCapacity << std::endl;
+    }
+};
+
+int main() {
+    // Create instances of Car, Bike, and Bus
+    Car myCar("Toyota", 2020, 4);
+    Bike myBike("Yamaha", 2018, true);
+    Bus myBus("Mercedes", 2015, 50);
+
+    // Display details of each transport
+    std::cout << "Car Details:" << std::endl;
+    myCar.displayDetails();
+    std::cout << std::endl;
+
+    std::cout << "Bike Details:" << std::endl;
+    myBike.displayDetails();
+    std::cout << std::endl;
+
+    std::cout << "Bus Details:" << std::endl;
+    myBus.displayDetails();
+    std::cout << std::endl;
+
+    return 0;
+}
+
+// OVER
