@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+#include <stdexcept>
+#include <limits>
+
+// Function to validate and get an integer input
+int getValidInteger(const std::string& prompt) {
+    while (true) {
+        std::cout << prompt;
+        int value;
+        
+        // Try to read an integer from the user
+        try {
+            std::string input;
+            std::getline(std::cin, input);
+            
+            // Convert the input string to an integer
+            value = std::stoi(input);
+            
+            // If successful, return the valid integer
+            return value;
+        }
+        catch (const std::invalid_argument&) {
+            // Catch exception if the input is not a valid integer
+            std::cout << "Error: Invalid input. Please enter a valid integer.\n";
+        }
+        catch (const std::out_of_range&) {
+            // Catch exception if the input is too large or small for an int
+            std::cout << "Error: Number out of range. Please enter a smaller number.\n";
+        }
+    }
+}
+
+// Function to validate and get a floating-point input
+double getValidDouble(const std::string& prompt) {
+    while (true) {
+        std::cout << prompt;
+        double value;
+        
+        // Try to read a double from the user
+        try {
+            std::string input;
+            std::getline(std::cin, input);
+            
+            // Convert the input string to a double
+            value = std::stod(input);
+            
+            // If successful, return the valid double
+            return value;
+        }
+        catch (const std::invalid_argument&) {
+            // Catch exception if the input is not a valid double
+            std::cout << "Error: Invalid input. Please enter a valid number.\n";
+        }
+        catch (const std::out_of_range&) {
+            // Catch exception if the input is too large or small for a double
+            std::cout << "Error: Number out of range. Please enter a smaller number.\n";
+        }
+    }
+}
+
+// Function to validate and get a non-empty string input
+std::string getValidString(const std::string& prompt) {
+    while (true) {
+        std::cout << prompt;
+        std::string input;
+        
+        // Get a line of input from the user
+        std::getline(std::cin, input);
+        
+        // Check if the input is not empty
+        if (!input.empty()) {
+            return input;
+        }
+        else {
+            std::cout << "Error: Input cannot be empty. Please try again.\n";
+        }
+    }
+}
+
+int main() {
+    // Welcome message
+    std::cout << "Welcome to the User Input Validator!\n\n";
+    
+    // Get and validate an integer
+    int age = getValidInteger("Please enter your age: ");
+    std::cout << "Your age is: " << age << " years old\n\n";
+    
+    // Get and validate a floating-point number
+    double height = getValidDouble("Please enter your height in meters: ");
+    std::cout << "Your height is: " << height << " meters\n\n";
+    
+    // Get and validate a string
+    std::string name = getValidString("Please enter your name: ");
+    std::cout << "Your name is: " << name << "\n\n";
+    
+    // Final message
+    std::cout << "Thank you for using the User Input Validator!\n";
+    
+    return 0;
+}
