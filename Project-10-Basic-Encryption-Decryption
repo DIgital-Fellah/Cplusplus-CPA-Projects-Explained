@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Function to encrypt the message
+string encryptMessage(string message, int shift) {
+    string encryptedMessage = "";
+
+    // Loop through each character in the message
+    for (char c : message) {
+        // Check if the character is an uppercase letter
+        if (isupper(c)) {
+            // Shift the character and wrap around if necessary
+            encryptedMessage += char(int(c + shift - 65) % 26 + 65);
+        }
+        // Check if the character is a lowercase letter
+        else if (islower(c)) {
+            // Shift the character and wrap around if necessary
+            encryptedMessage += char(int(c + shift - 97) % 26 + 97);
+        }
+        // If it's not a letter, leave it unchanged
+        else {
+            encryptedMessage += c;
+        }
+    }
+
+    return encryptedMessage;
+}
+
+// Function to decrypt the message
+string decryptMessage(string encryptedMessage, int shift) {
+    string decryptedMessage = "";
+
+    // Loop through each character in the encrypted message
+    for (char c : encryptedMessage) {
+        // Check if the character is an uppercase letter
+        if (isupper(c)) {
+            // Shift the character back and wrap around if necessary
+            decryptedMessage += char(int(c - shift - 65 + 26) % 26 + 65);
+        }
+        // Check if the character is a lowercase letter
+        else if (islower(c)) {
+            // Shift the character back and wrap around if necessary
+            decryptedMessage += char(int(c - shift - 97 + 26) % 26 + 97);
+        }
+        // If it's not a letter, leave it unchanged
+        else {
+            decryptedMessage += c;
+        }
+    }
+
+    return decryptedMessage;
+}
+
+int main() {
+    string message;
+    int shift;
+
+    // Get the message to be encrypted from the user
+    cout << "Enter the message to be encrypted: ";
+    getline(cin, message);
+
+    // Get the shift value from the user
+    cout << "Enter the shift value (1-25): ";
+    cin >> shift;
+
+    // Encrypt the message
+    string encryptedMessage = encryptMessage(message, shift);
+    cout << "Encrypted Message: " << encryptedMessage << endl;
+
+    // Decrypt the message
+    string decryptedMessage = decryptMessage(encryptedMessage, shift);
+    cout << "Decrypted Message: " << decryptedMessage << endl;
+
+    return 0;
+}
