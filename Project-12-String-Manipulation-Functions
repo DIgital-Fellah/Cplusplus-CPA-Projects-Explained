@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+// Function to reverse a string
+std::string reverseString(const std::string& input) {
+    // Create a new string with the same content as input
+    std::string reversed = input;
+    // Use the reverse function from the algorithm library to reverse the string in place
+    std::reverse(reversed.begin(), reversed.end());
+    return reversed;
+}
+
+// Function to concatenate two strings
+std::string concatenateStrings(const std::string& str1, const std::string& str2) {
+    // Simply use the + operator to join the two strings
+    return str1 + str2;
+}
+
+// Function to find a substring within a string
+int findSubstring(const std::string& mainStr, const std::string& subStr) {
+    // Use the find method of string class to locate the substring
+    // It returns the starting position of the substring if found, or string::npos if not found
+    size_t position = mainStr.find(subStr);
+    
+    // Convert size_t to int for easier understanding
+    // If substring is not found, return -1 instead of string::npos
+    return (position != std::string::npos) ? static_cast<int>(position) : -1;
+}
+
+// Function to count occurrences of a character in a string
+int countCharOccurrences(const std::string& str, char ch) {
+    // Use the count function from algorithm library to count occurrences
+    return std::count(str.begin(), str.end(), ch);
+}
+
+// Function to convert a string to uppercase
+std::string toUpperCase(const std::string& str) {
+    // Create a new string with the same content as input
+    std::string upperStr = str;
+    // Use transform function from algorithm library to convert each character to uppercase
+    std::transform(upperStr.begin(), upperStr.end(), upperStr.begin(), ::toupper);
+    return upperStr;
+}
+
+int main() {
+    // Test the string manipulation functions
+    
+    std::string testString = "Hello, World!";
+    std::string anotherString = " How are you?";
+    
+    // Test reverse function
+    std::cout << "Original string: " << testString << std::endl;
+    std::cout << "Reversed string: " << reverseString(testString) << std::endl;
+    
+    // Test concatenate function
+    std::cout << "Concatenated string: " << concatenateStrings(testString, anotherString) << std::endl;
+    
+    // Test find substring function
+    std::string subString = "World";
+    int position = findSubstring(testString, subString);
+    if (position != -1) {
+        std::cout << "Substring '" << subString << "' found at position: " << position << std::endl;
+    } else {
+        std::cout << "Substring '" << subString << "' not found" << std::endl;
+    }
+    
+    // Test count character occurrences function
+    char charToCount = 'l';
+    std::cout << "Occurrences of '" << charToCount << "' in the string: " 
+              << countCharOccurrences(testString, charToCount) << std::endl;
+    
+    // Test to uppercase function
+    std::cout << "Uppercase version: " << toUpperCase(testString) << std::endl;
+    
+    return 0;
+}
+OVER
