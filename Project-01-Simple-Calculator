@@ -1,0 +1,93 @@
+#include <iostream>
+#include <stdexcept>
+
+// Function declarations
+double add(double a, double b);
+double subtract(double a, double b);
+double multiply(double a, double b);
+double divide(double a, double b);
+
+int main() {
+    // Declare variables to store user input
+    double num1, num2;
+    char operation;
+
+    // Main program loop
+    while (true) {
+        // Prompt user for input
+        std::cout << "Enter first number: ";
+        std::cin >> num1;
+
+        std::cout << "Enter operation (+, -, *, /) or 'q' to quit: ";
+        std::cin >> operation;
+
+        // Check if user wants to quit
+        if (operation == 'q' || operation == 'Q') {
+            std::cout << "Goodbye!" << std::endl;
+            break;  // Exit the loop and end the program
+        }
+
+        std::cout << "Enter second number: ";
+        std::cin >> num2;
+
+        // Variable to store the result
+        double result;
+
+        try {
+            // Perform the requested operation
+            switch (operation) {
+                case '+':
+                    result = add(num1, num2);
+                    break;
+                case '-':
+                    result = subtract(num1, num2);
+                    break;
+                case '*':
+                    result = multiply(num1, num2);
+                    break;
+                case '/':
+                    result = divide(num1, num2);
+                    break;
+                default:
+                    // If an invalid operation is entered, throw an exception
+                    throw std::invalid_argument("Invalid operation");
+            }
+
+            // Display the result
+            std::cout << "Result: " << result << std::endl;
+        }
+        catch (const std::exception& e) {
+            // Catch and display any exceptions that were thrown
+            std::cout << "Error: " << e.what() << std::endl;
+        }
+
+        std::cout << std::endl;  // Add a blank line for readability
+    }
+
+    return 0;  // End the program
+}
+
+// Function to add two numbers
+double add(double a, double b) {
+    return a + b;
+}
+
+// Function to subtract two numbers
+double subtract(double a, double b) {
+    return a - b;
+}
+
+// Function to multiply two numbers
+double multiply(double a, double b) {
+    return a * b;
+}
+
+// Function to divide two numbers
+double divide(double a, double b) {
+    // Check if we're trying to divide by zero
+    if (b == 0) {
+        throw std::runtime_error("Division by zero");
+    }
+    return a / b;
+}
+OVER
