@@ -1,0 +1,81 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <ctime>
+
+// Define a structure to hold question-answer pairs
+struct QAPair {
+    std::string question;
+    std::string answer;
+};
+
+// Function to convert a string to lowercase
+std::string toLower(std::string s) {
+    std::transform(s.begin(), s.end(), s.begin(), 
+                   [](unsigned char c){ return std::tolower(c); });
+    return s;
+}
+
+int main() {
+    // Seed the random number generator
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    // Create a vector to store our question-answer pairs
+    std::vector<QAPair> qaDatabase = {
+        {"hello", "Hi there! How can I help you today?"},
+        {"how are you", "I'm doing well, thank you for asking!"},
+        {"what is your name", "My name is ChatBot. It's nice to meet you!"},
+        {"bye", "Goodbye! Have a great day!"},
+        {"thank you", "You're welcome! Is there anything else I can help with?"}
+    };
+
+    // Add some default responses for when we don't understand the input
+    std::vector<std::string> defaultResponses = {
+        "I'm not sure I understand. Could you rephrase that?",
+        "That's an interesting question. Can you tell me more?",
+        "I don't have an answer for that. Is there something else I can help with?",
+        "I'm still learning and don't know how to respond to that yet."
+    };
+
+    std::string userInput;
+    bool chatting = true;
+
+    std::cout << "ChatBot: Hello! I'm a simple chatbot. How can I help you today?" << std::endl;
+
+    // Main chat loop
+    while (chatting) {
+        std::cout << "You: ";
+        std::getline(std::cin, userInput);
+
+        // Convert user input to lowercase for easier matching
+        userInput = toLower(userInput);
+
+        // Flag to check if we found a matching question
+        bool foundMatch = false;
+
+        // Check if the user wants to exit
+        if (userInput == "exit" || userInput == "quit") {
+            std::cout << "ChatBot: Goodbye! It was nice chatting with you." << std::endl;
+            chatting = false;
+            continue;
+        }
+
+        // Loop through our QA database to find a matching question
+        for (const auto& qa : qaDatabase) {
+            if (userInput.find(qa.question) != std::string::npos) {
+                std::cout << "ChatBot: " << qa.answer << std::endl;
+                foundMatch = true;
+                break;
+            }
+        }
+
+        // If no match was found, give a random default response
+        if (!foundMatch) {
+            int randomIndex = std::rand() % defaultResponses.size();
+            std::cout << "ChatBot: " << defaultResponses[randomIndex] << std::endl;
+        }
+    }
+
+    return 0;
+}
