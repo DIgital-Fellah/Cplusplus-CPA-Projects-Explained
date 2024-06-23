@@ -1,0 +1,186 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+// Define a Book class to represent individual books
+class Book {
+private:
+    std::string title;
+    std::string author;
+    std::string isbn;
+    bool available;
+
+public:
+    // Constructor to initialize a book with its details
+    Book(const std::string& t, const std::string& a, const std::string& i)
+        : title(t), author(a), isbn(i), available(true) {}
+
+    // Getter methods to access private member variables
+    std::string getTitle() const { return title; }
+    std::string getAuthor() const { return author; }
+    std::string getISBN() const { return isbn; }
+    bool isAvailable() const { return available; }
+
+    // Method to change the availability status of the book
+    void setAvailability(bool status) { available = status; }
+
+    // Method to display book information
+    void display() const {
+        std::cout << "Title: " << title << ", Author: " << author
+                  << ", ISBN: " << isbn << ", Available: "
+                  << (available ? "Yes" : "No") << std::endl;
+    }
+};
+
+// Define a Library class to manage the collection of books
+class Library {
+private:
+    std::vector<Book> books;  // Vector to store all books in the library
+
+public:
+    // Method to add a new book to the library
+    void addBook(const std::string& title, const std::string& author, const std::string& isbn) {
+        books.emplace_back(title, author, isbn);
+        std::cout << "Book added successfully." << std::endl;
+    }
+
+    // Method to remove a book from the library by ISBN
+    void removeBook(const std::string& isbn) {
+        auto it = std::find_if(books.begin(), books.end(),
+                               [&isbn](const Book& b) { return b.getISBN() == isbn; });
+        if (it != books.end()) {
+            books.erase(it);
+            std::cout << "Book removed successfully." << std::endl;
+        } else {
+            std::cout << "Book not found." << std::endl;
+        }
+    }
+
+    // Method to search for a book by title
+    void searchBook(const std::string& title) {
+        bool found = false;
+        for (const auto& book : books) {
+            if (book.getTitle() == title) {
+                book.display();
+                found = true;
+            }
+        }
+        if (!found) {
+            std::cout << "No books found with the given title." << std::endl;
+        }
+    }
+
+    // Method to display all books in the library
+    void displayAllBooks() const {
+        if (books.empty()) {
+            std::cout << "The library is empty." << std::endl;
+        } else {
+            for (const auto& book : books) {
+                book.display();
+            }
+        }
+    }
+
+    // Method to check out a book by ISBN
+    void checkOutBook(const std::string& isbn) {
+        auto it = std::find_if(books.begin(), books.end(),
+                               [&isbn](const Book& b) { return b.getISBN() == isbn; });
+        if (it != books.end()) {
+            if (it->isAvailable()) {
+                it->setAvailability(false);
+                std::cout << "Book checked out successfully." << std::endl;
+            } else {
+                std::cout << "Book is not available for checkout." << std::endl;
+            }
+        } else {
+            std::cout << "Book not found." << std::endl;
+        }
+    }
+
+    // Method to return a book by ISBN
+    void returnBook(const std::string& isbn) {
+        auto it = std::find_if(books.begin(), books.end(),
+                               [&isbn](const Book& b) { return b.getISBN() == isbn; });
+        if (it != books.end()) {
+            if (!it->isAvailable()) {
+                it->setAvailability(true);
+                std::cout << "Book returned successfully." << std::endl;
+            } else {
+                std::cout << "This book is already in the library." << std::endl;
+            }
+        } else {
+            std::cout << "Book not found." << std::endl;
+        }
+    }
+};
+
+// Main function to demonstrate the Library Management System
+int main() {
+    Library library;  // Create a Library object
+    int choice;
+    std::string title, author, isbn;
+
+    // Main program loop
+    do {
+        // Display menu options
+        std::cout << "\nLibrary Management System\n";
+        std::cout << "1. Add a book\n";
+        std::cout << "2. Remove a book\n";
+        std::cout << "3. Search for a book\n";
+        std::cout << "4. Display all books\n";
+        std::cout << "5. Check out a book\n";
+        std::cout << "6. Return a book\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        // Process user's choice
+        switch (choice) {
+            case 1:  // Add a book
+                std::cout << "Enter title: ";
+                std::cin.ignore();
+                std::getline(std::cin, title);
+                std::cout << "Enter author: ";
+                std::getline(std::cin, author);
+                std::cout << "Enter ISBN: ";
+                std::getline(std::cin, isbn);
+                library.addBook(title, author, isbn);
+                break;
+            case 2:  // Remove a book
+                std::cout << "Enter ISBN of the book to remove: ";
+                std::cin.ignore();
+                std::getline(std::cin, isbn);
+                library.removeBook(isbn);
+                break;
+            case 3:  // Search for a book
+                std::cout << "Enter title to search: ";
+                std::cin.ignore();
+                std::getline(std::cin, title);
+                library.searchBook(title);
+                break;
+            case 4:  // Display all books
+                library.displayAllBooks();
+                break;
+            case 5:  // Check out a book
+                std::cout << "Enter ISBN of the book to check out: ";
+                std::cin.ignore();
+                std::getline(std::cin, isbn);
+                library.checkOutBook(isbn);
+                break;
+            case 6:  // Return a book
+                std::cout << "Enter ISBN of the book to return: ";
+                std::cin.ignore();
+                std::getline(std::cin, isbn);
+                library.returnBook(isbn);
+                break;
+            case 0:  // Exit the program
+                std::cout << "Thank you for using the Library Management System. Goodbye!\n";
+                break;
+            default:  // Invalid choice
+                std::cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 0);  // Continue until the user chooses to exit
+
+    return 0;
+}
