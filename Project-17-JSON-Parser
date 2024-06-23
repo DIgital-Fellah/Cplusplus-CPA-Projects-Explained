@@ -1,0 +1,55 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <json/json.h> // Include the JSON library header
+
+// Function to read the contents of a file into a string
+std::string readFile(const std::string& fileName) {
+    std::ifstream file(fileName); // Open the file
+    if (!file.is_open()) { // Check if the file was opened successfully
+        std::cerr << "Could not open the file!" << std::endl;
+        return "";
+    }
+
+    std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()); // Read the file contents into a string
+    file.close(); // Close the file
+    return content; // Return the file contents
+}
+
+int main() {
+    // Specify the path to the JSON file
+    std::string fileName = "data.json";
+
+    // Read the JSON file contents into a string
+    std::string jsonData = readFile(fileName);
+
+    // Check if the file was read successfully
+    if (jsonData.empty()) {
+        std::cerr << "Failed to read the file or the file is empty." << std::endl;
+        return 1; // Exit the program with an error code
+    }
+
+    // Create a JSON reader object
+    Json::CharReaderBuilder readerBuilder;
+    Json::CharReader* reader = readerBuilder.newCharReader();
+
+    // Create a JSON value object to hold the parsed data
+    Json::Value jsonDataValue;
+    std::string errors;
+
+    // Parse the JSON data
+    bool parsingSuccessful = reader->parse(jsonData.c_str(), jsonData.c_str() + jsonData.size(), &jsonDataValue, &errors);
+    delete reader; // Delete the reader object
+
+    // Check if the parsing was successful
+    if (!parsingSuccessful) {
+        std::cerr << "Failed to parse the JSON data: " << errors << std::endl;
+        return 1; // Exit the program with an error code
+    }
+
+    // Display the parsed JSON data
+    std::cout << "Parsed JSON data:" << std::endl;
+    std::cout << jsonDataValue.toStyledString() << std::endl;
+
+    return 0; // Exit the program successfully
+}
